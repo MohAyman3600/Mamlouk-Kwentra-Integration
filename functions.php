@@ -1,5 +1,6 @@
 <?php
-
+// Include the order_tracking.php file
+include_once __DIR__ . '/order_tracking.php';
 
 /* ----------------------------------------------------------------------------
 
@@ -100,29 +101,29 @@ function getRoomTypes(){
     
 //     // Get cart items
 //     $cart_items = $cart->get_cart_contents();
-// 	$log_file = '/home/wpstaging/web/wp-staging/wp-content/themes/soho-hotel-child/cart.log';
+// 	$log_file = '/home/wplive/web/wp-live/wp-content/themes/soho-hotel-child/cart.log';
 // 	file_put_contents($log_file, print_r($cart_items, true), FILE_APPEND);
 
 // 	// Log the form data to a custom log file
 // 	$rooms_avail = getRoomTypes('2023-12-16', '2023-12-17');
 //     // $s = $rooms_avail['Superior Twin Room'][0]['room_type_id'];
 //     $room_type_id = array_search('Superior Twin Room', array_column($rooms_avail,'name'));
-//     $log_file = '/home/wpstaging/web/wp-staging/wp-content/themes/soho-hotel-child/avail.log';
+//     $log_file = '/home/wplive/web/wp-live/wp-content/themes/soho-hotel-child/avail.log';
 // 	file_put_contents($log_file, print_r(getRoomRates($rooms_avail[$room_type_id]['id']), true), FILE_APPEND);
 
-//     $log_file = '/home/wpstaging/web/wp-staging/wp-content/themes/soho-hotel-child/session.log';
+//     $log_file = '/home/wplive/web/wp-live/wp-content/themes/soho-hotel-child/session.log';
 //     file_put_contents($log_file, print_r($_SESSION, true), FILE_APPEND);
 
-//     $log_file = '/home/wpstaging/web/wp-staging/wp-content/themes/soho-hotel-child/room.log';
+//     $log_file = '/home/wplive/web/wp-live/wp-content/themes/soho-hotel-child/room.log';
 //     $room = get_post_meta($_SESSION['shb_booking_data'][1]['room_id']);
 //     file_put_contents($log_file, print_r($room, true), FILE_APPEND);
 
-//     $log_file = '/home/wpstaging/web/wp-staging/wp-content/themes/soho-hotel-child/rate.log';
+//     $log_file = '/home/wplive/web/wp-live/wp-content/themes/soho-hotel-child/rate.log';
 //     $rate = get_post_meta($_SESSION['shb_booking_data'][1]['rate_id']);
 //     file_put_contents($log_file, print_r($rate, true), FILE_APPEND);
 
 //     $guests = $_SESSION['shb_booking_data'][1]['guests'];
-//     $log_file = '/home/wpstaging/web/wp-staging/wp-content/themes/soho-hotel-child/guests.log';
+//     $log_file = '/home/wplive/web/wp-live/wp-content/themes/soho-hotel-child/guests.log';
 //     foreach($guests as $key => $value){
 //         $s1 =  get_post_meta($key);
 //         file_put_contents($log_file, print_r($s1, true), FILE_APPEND);
@@ -138,7 +139,7 @@ function create_kwentra_booking() {
     $session_booking_data = $_SESSION['shb_booking_data'];
     $summary_data_encoded_full['shb_booking_data'][0] = json_encode($_SESSION['shb_booking_data']);
     $booking_summary_full = shb_get_booking_summary($summary_data_encoded_full);
-    $sumary_log = '/home/wpstaging/web/wp-staging/wp-content/themes/soho-hotel-child/sumary.log';
+    $sumary_log = '/home/wplive/web/wp-live/wp-content/themes/soho-hotel-child/sumary.log';
     $grouped_data = groupBookingsByDates($session_booking_data, $booking_summary_full['items']);
     file_put_contents($sumary_log, print_r($grouped_data, true), FILE_APPEND);
 
@@ -206,7 +207,7 @@ function create_kwentra_booking() {
             $room = get_post($booking['room_id']);
             $rate = get_post($booking['rate_id']);
             $room_type_index = array_search($room->post_title, array_column($room_types, 'name'));
-            $log_file = '/home/wpstaging/web/wp-staging/wp-content/themes/soho-hotel-child/data.log';
+            $log_file = '/home/wplive/web/wp-live/wp-content/themes/soho-hotel-child/data.log';
             file_put_contents($log_file, print_r([json_encode($room_type_index), json_encode(gettype($room_type_index)), $room->post_title, json_encode(($room_type_index !== false))], true), FILE_APPEND);
             if($room_type_index !== false){
                 $room_type_id = $room_types[$room_type_index]['id'];
@@ -276,7 +277,7 @@ function create_kwentra_booking() {
         $single_reserv = array_merge($reservation, ['selectedRooms'=>$selectedRooms]);
         array_push($reservations, $single_reserv);
     }
-    $log_file = '/home/wpstaging/web/wp-staging/wp-content/themes/soho-hotel-child/reserv.log';
+    $log_file = '/home/wplive/web/wp-live/wp-content/themes/soho-hotel-child/reserv.log';
     file_put_contents($log_file, print_r($reservations, true), FILE_APPEND);
 
     update_option('current_reservation', $reservations);
@@ -297,7 +298,7 @@ function getBillingInfo(){
         'billing_first_name' =>  sanitize_text_field($_POST['billing_first_name']) . sanitize_text_field($_POST['billing_last_name']),
         'billing_phone' => sanitize_text_field($_POST['billing_phone']),
     ];
-    $log_file = '/home/wpstaging/web/wp-staging/wp-content/themes/soho-hotel-child/test.log';
+    $log_file = '/home/wplive/web/wp-live/wp-content/themes/soho-hotel-child/test.log';
     file_put_contents($log_file, print_r($data, true), FILE_APPEND);
     update_option('billing_info', $data);
 }
@@ -338,7 +339,7 @@ function send_api_requests($order_id)
         'status' => null,
         'specific_rooms_selling' => false,
     ];
-    $log_file = '/home/wpstaging/web/wp-staging/wp-content/themes/soho-hotel-child/post.log';
+    $log_file = '/home/wplive/web/wp-live/wp-content/themes/soho-hotel-child/post.log';
     file_put_contents($log_file, print_r($data, true), FILE_APPEND);
 
     // Prepare the payload for the first API request
@@ -365,9 +366,9 @@ function send_api_requests($order_id)
         $selected_rooms_str = concatenateArrayToString($reservation['selectedRooms']);
         $first_api_payload = array_merge($data, $reservation);
         $first_api_payload['selected_rooms_str'] = $selected_rooms_str;
-        $log_file = '/home/wpstaging/web/wp-staging/wp-content/themes/soho-hotel-child/data.log';
+        $log_file = '/home/wplive/web/wp-live/wp-content/themes/soho-hotel-child/data.log';
         file_put_contents($log_file, print_r($first_api_payload, true), FILE_APPEND);
-        $log_file_txt = '/home/wpstaging/web/wp-staging/wp-content/themes/soho-hotel-child/log.txt';
+        $log_file_txt = '/home/wplive/web/wp-live/wp-content/themes/soho-hotel-child/log.txt';
         $json_data = json_encode($first_api_payload, JSON_UNESCAPED_SLASHES);
         file_put_contents($log_file_txt, $json_data . PHP_EOL, FILE_APPEND);
 
@@ -383,7 +384,7 @@ function send_api_requests($order_id)
                 'body' => json_encode($first_api_payload, JSON_UNESCAPED_SLASHES),
             )
         );
-        $resp_log = '/home/wpstaging/web/wp-staging/wp-content/themes/soho-hotel-child/response.log';
+        $resp_log = '/home/wplive/web/wp-live/wp-content/themes/soho-hotel-child/response.log';
         file_put_contents($resp_log, print_r(wp_remote_retrieve_body($first_response), true), FILE_APPEND);
         
         //collect successfull and failed orders
@@ -411,7 +412,7 @@ function send_api_requests($order_id)
         // Update the order status to "failed" or any other desired status
         $order = wc_get_order($order_id);
         update_option('kwentra_failed_orders', ['woo_order_id'=> $order_id, 'failed_orders'=>$failedOrders, 'success_orders'=>$successOrders]);
-        $fail_log = '/home/wpstaging/web/wp-staging/wp-content/themes/soho-hotel-child/fail.log';
+        $fail_log = '/home/wplive/web/wp-live/wp-content/themes/soho-hotel-child/fail.log';
         file_put_contents($fail_log, print_r(['woo_order_id'=> $order_id, 'failed_orders'=>$failedOrders], true), FILE_APPEND);
         
         // Set woocommerce order to failed
@@ -439,7 +440,7 @@ function send_api_requests($order_id)
                 array_push($successPayments, ['KWENTRA_order_id' => $KWENTRA_order['order_id'], 'order'=>$KWENTRA_order['order'],'payment_response_body'=> $second_response_body]);
             }else{
                 $second_error_message = wp_remote_retrieve_response_message($second_response);
-                array_push($successPayments, ['KWENTRA_order_id' => $KWENTRA_order['order_id'], 'order'=>$KWENTRA_order['order'],'payment_error_message'=> $second_error_message]);
+                array_push($failedPayments, ['KWENTRA_order_id' => $KWENTRA_order['order_id'], 'order'=>$KWENTRA_order['order'],'payment_error_message'=> $second_error_message]);
             }
         }
 
@@ -450,8 +451,7 @@ function send_api_requests($order_id)
             // Update the order status to "failed" or any other desired status
             $order = wc_get_order($order_id);
             update_option('kwentra_failed_payments', ['woo_order_id'=> $order_id, 'failed_payments'=>$failedPayments]);
-            $fail_log = '/home/wpstaging/web/wp-staging/wp-content/themes/soho-hotel-child/fail.log';
-            file_put_contents($fail_log, print_r(['woo_order_id'=> $order_id, 'failed_payments'=>$failedPayments], true), FILE_APPEND);
+            
             // Check if no successful orders created set woocommerce order to failed
             
             // set failed status
@@ -535,7 +535,8 @@ function modified_shb_booking_step_4() {
 		$get_order_id = wc_get_order_id_by_order_key( $_GET['key'] );
 		$get_wc_order = wc_get_order( $get_order_id );
 		$get_wc_order_status = $get_wc_order->get_status();
-        
+        $fail_log = '/home/wplive/web/wp-live/wp-content/themes/soho-hotel-child/fail.log';
+        file_put_contents($fail_log, print_r($get_wc_order_status, true), FILE_APPEND);
         // Handle displaying Kwentra Failed Orders to user
         $kwentra_failed_orders = get_option('kwentra_failed_orders');
         $kwentra_failed_payments = get_option('kwentra_failed_payments');
@@ -562,7 +563,7 @@ function modified_shb_booking_step_4() {
             $FAILED_KWENTRA_HTML .= '<hr>';
             $FAILED_KWENTRA_HTML .=  '<p><i class="fa fa-smile"></i>The Good News is that the rest of the rooms can be reserved successfully.<br> Please contact support for further details.</p>';
             $FAILED_KWENTRA_HTML .=  '</div>';
-            $log_file = '/home/wpstaging/web/wp-staging/wp-content/themes/soho-hotel-child/data.log';
+            $log_file = '/home/wplive/web/wp-live/wp-content/themes/soho-hotel-child/data.log';
             file_put_contents($log_file, print_r($FAILED_KWENTRA_HTML, true), FILE_APPEND);                
         }
 	}
@@ -709,52 +710,64 @@ function modified_shb_booking_step_4() {
 			
 					<!-- BEGIN .shb-booking-complete-wrapper -->
 					<div class="shb-booking-complete-wrapper">
-				
+                        
+                    <?php if($wc_order_status == 'pending'){ ?>
+                        <h3><?php _e('Booking On Hold!','sohohotel_booking') ?> (#<?php echo $booking_id; ?>)</h3>
+                    <? }else{?>
 						<i class="fas fa-check"></i>
-						<h3><?php _e('Booking Complete!','sohohotel_booking')?> (#<?php echo $booking_id; ?>)</h3>
-			
+						<h3><?php _e('Booking Complete!','sohohotel_booking') ?> (#<?php echo $booking_id; ?>)</h3>
+                    <?php } ?>
 					<!-- END .shb-booking-complete-wrapper -->
 					</div>
 
                     <?php echo $FAILED_KWENTRA_HTML; ?>
+
+                    <?php if($wc_order_status == 'pending'){ ?>
+                        <div style="font-family: Arial, sans-serif; font-size: 16px; line-height: 1.5; margin: 20px;">
+                            <p>We apologize for the inconvenience, but it appears that there was an issue processing your payment. Your reservation has been successfully made and is currently in pending status. Please note your booking number for reference: <span style="font-weight: bold;"><?php echo $booking_id; ?></span>.</p>
+                            <p>To ensure your reservation is confirmed, we kindly request that you complete the payment within the next 24 hours. You will receive an email shortly with payment instructions. Please note that if payment is not received within the given time frame, your reservation will be automatically canceled.</p>
+                            <p>If you have any questions or need assistance with the payment process, please don't hesitate to contact our customer support team at <span style="color: #007bff; text-decoration: none;">reservations@mamloukpyramidshotel.com</span>. We are available 24/7 to help resolve any issues and ensure a smooth reservation experience for you.</p>
+                            <p>Thank you for choosing our hotel reservation website. We appreciate your patience and cooperation in resolving this matter promptly.</p>
+                        </div>
+                    <?php }else{ ?>
 			
-					<!-- BEGIN .shb-booking-notification-wrapper -->
-					<div class="shb-booking-notification-wrapper">
-				
-						<p><i class="fas fa-envelope"></i><?php echo sprintf( __( 'A confirmation email has been sent to %s', 'sohohotel_booking' ), $email ); ?></p>
-			
-					<!-- END .shb-booking-notification-wrapper -->
-					</div>
-			
-					<h3 class="sohohotel-title-20px sohohotel-clearfix sohohotel-title-left"><?php _e('Thank You','sohohotel_booking'); ?></h3>
-					<p class="shb-booking-confirmation-message"><?php echo get_option('shb_booking_success_message'); ?></p>
-			
-					<h3 class="sohohotel-title-20px sohohotel-clearfix sohohotel-title-left"><?php _e('Check In','sohohotel_booking'); ?></h3>
-					<ul class="shb-booking-checkin-checkout">
-						
-						<?php $check_in_date = get_post_meta($booking_id,'shb_checkin',TRUE);
-						$check_out_date = get_post_meta($booking_id,'shb_checkout',TRUE);
-						$check_in_time = get_option('shb_checkin_time');
-						$check_out_time = get_option('shb_checkout_time'); ?>
-						
-						<li><span><?php _e('Check In','sohohotel_booking'); ?>:</span> <?php echo sprintf( __( '%s at %s', 'sohohotel_booking' ), $check_in_date, $check_in_time ); ?></li>
-						<li><span><?php _e('Check Out','sohohotel_booking'); ?>:</span> <?php echo sprintf( __( '%s at %s', 'sohohotel_booking' ), $check_out_date, $check_out_time ); ?></li>
-						
-					</ul>
-			
-					<h3 class="sohohotel-title-20px sohohotel-clearfix sohohotel-title-left"><?php _e('Find Us','sohohotel_booking'); ?></h3>
-					<ul class="sohohotel-contact-details-list">
-						<li class="sohohotel-address clearfix"><?php echo get_option('shb_hotel_address'); ?></li>
-						<li class="sohohotel-phone clearfix"><a href="tel:<?php echo get_option('shb_hotel_phone'); ?>"><?php echo get_option('shb_hotel_phone'); ?></a></li>
-						<li class="sohohotel-email clearfix"><a href="mailto:<?php echo get_option('shb_email_address'); ?>"><?php echo get_option('shb_email_address'); ?></a></li>
-					</ul>
-			
-				<!-- END .shb-booking-page-main -->
-				</div>
-		
-			<!-- END .shb-booking-page-wrapper -->
-			</div>
-		
+                        <!-- BEGIN .shb-booking-notification-wrapper -->
+                        <div class="shb-booking-notification-wrapper">
+                    
+                            <p><i class="fas fa-envelope"></i><?php echo sprintf( __( 'A confirmation email has been sent to %s', 'sohohotel_booking' ), $email ); ?></p>
+                
+                        <!-- END .shb-booking-notification-wrapper -->
+                        </div>
+                
+                        <h3 class="sohohotel-title-20px sohohotel-clearfix sohohotel-title-left"><?php _e('Thank You','sohohotel_booking'); ?></h3>
+                        <p class="shb-booking-confirmation-message"><?php echo get_option('shb_booking_success_message'); ?></p>
+                
+                        <h3 class="sohohotel-title-20px sohohotel-clearfix sohohotel-title-left"><?php _e('Check In','sohohotel_booking'); ?></h3>
+                        <ul class="shb-booking-checkin-checkout">
+                            
+                            <?php $check_in_date = get_post_meta($booking_id,'shb_checkin',TRUE);
+                            $check_out_date = get_post_meta($booking_id,'shb_checkout',TRUE);
+                            $check_in_time = get_option('shb_checkin_time');
+                            $check_out_time = get_option('shb_checkout_time'); ?>
+                            
+                            <li><span><?php _e('Check In','sohohotel_booking'); ?>:</span> <?php echo sprintf( __( '%s at %s', 'sohohotel_booking' ), $check_in_date, $check_in_time ); ?></li>
+                            <li><span><?php _e('Check Out','sohohotel_booking'); ?>:</span> <?php echo sprintf( __( '%s at %s', 'sohohotel_booking' ), $check_out_date, $check_out_time ); ?></li>
+                            
+                        </ul>
+                
+                        <h3 class="sohohotel-title-20px sohohotel-clearfix sohohotel-title-left"><?php _e('Find Us','sohohotel_booking'); ?></h3>
+                        <ul class="sohohotel-contact-details-list">
+                            <li class="sohohotel-address clearfix"><?php echo get_option('shb_hotel_address'); ?></li>
+                            <li class="sohohotel-phone clearfix"><a href="tel:<?php echo get_option('shb_hotel_phone'); ?>"><?php echo get_option('shb_hotel_phone'); ?></a></li>
+                            <li class="sohohotel-email clearfix"><a href="mailto:<?php echo get_option('shb_email_address'); ?>"><?php echo get_option('shb_email_address'); ?></a></li>
+                        </ul>
+                
+                    <!-- END .shb-booking-page-main -->
+                    </div>
+            
+                <!-- END .shb-booking-page-wrapper -->
+                </div>
+            <?php } ?>
 		<?php } else {
 		
 			echo '<p class="shb-booking-error-4">Error, no booking to be processed</p>';
